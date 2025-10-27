@@ -1,0 +1,222 @@
+-----------------------------------------------------------------------------------------------------------
+SYSTEM ARCHITECTURE DIAGRAM
+┌───────────────────────────────────────────┐
+│                 FRONTEND                  │
+│    React / Next.js (Vercel / Netlify)     │
+│                                           │
+│  Components:                              │
+│  • Chart.jsx (Lightweight Charts)         │
+│  • Watchlist.jsx                          │
+│  • IndicatorPanel.jsx                     │
+│  • Login/Register.jsx                     │
+│  • Settings.jsx                           │
+│                                           │
+│  Communicates with backend via:           │
+│  → HTTPS REST API (Axios)                 │
+│  → WebSocket (live updates, alerts)       │
+└────────────────────────┬──────────────────┘
+                         │
+                         │
+        ┌────────────────┴────────────────┐
+        │             BACKEND              │
+        │       Node.js + Express          │
+        │  Services:                       │
+        │  • REST API routes               │
+        │  • WebSocket server              │
+        │  • Data fetchers (market APIs)   │
+        │  • Auth (JWT/OAuth2)             │
+        │----------------------------------│
+        │  Routes:                         │
+        │  /api/auth                       │
+        │  /api/user                       │
+        │  /api/chart                      │
+        │  /api/alerts                     │
+        │  /api/watchlist                  │
+        └───────────────┬──────────────────┘
+                        │
+                        │
+       ┌────────────────┴──────────────────┐
+       │         DATA & CACHING LAYER      │
+       │───────────────────────────────────│
+       │ PostgreSQL (RDS)                  │
+       │  • users                          │
+       │  • watchlists                     │
+       │  • alerts                         │
+       │  • symbols / candlesticks         │
+       │-----------------------------------│
+       │ Redis (ElastiCache)               │
+       │  • Cached live quotes             │
+       │  • Alert triggers (Pub/Sub)       │
+       └────────────────┬──────────────────┘
+                        │
+                        │
+          ┌─────────────┴─────────────────┐
+          │     MARKET DATA PROVIDERS     │
+          │ Alpha Vantage, Finnhub, etc.  │
+          │ REST or WebSocket streams     │
+          └───────────────────────────────┘
+-----------------------------------------------------------------------------------------------------------
+BACKEND FOLDER STRUCTURE
+-----------------------------------------------------------------------------------------------------------
+backend/
+├── src/
+│   ├── server.js                # Entry point
+│   ├── config/
+│   │   ├── db.js                # PostgreSQL connection
+│   │   ├── redis.js             # Redis connection
+│   │   └── env.js               # Environment variables
+│   ├── api/
+│   │   ├── auth.js              # Login/register routes
+│   │   ├── chart.js             # Chart data routes
+│   │   ├── alerts.js            # Alert management
+│   │   ├── watchlist.js         # User watchlist endpoints
+│   │   └── index.js             # Route aggregator
+│   ├── sockets/
+│   │   ├── index.js             # WebSocket server
+│   │   └── alerts.js            # Alert broadcasting
+│   ├── models/
+│   │   ├── User.js              # Users table
+│   │   ├── Alert.js             # Alerts table
+│   │   ├── Watchlist.js         # Watchlist table
+│   │   └── SymbolData.js        # Symbol/candle data
+│   ├── services/
+│   │   ├── marketData.js        # Pulls data from APIs
+│   │   ├── indicators.js        # Calculates indicators
+│   │   └── authService.js       # JWT logic
+│   ├── utils/
+│   │   ├── logger.js            # Winston or console logging
+│   │   └── errorHandler.js      # Error middleware
+│   └── middleware/
+│       ├── authMiddleware.js    # JWT validation
+│       └── rateLimiter.js       # API throttling
+├── package.json
+├── .env
+└── README.md
+-----------------------------------------------------------------------------------------------------------
+FRONTEND FOLDER STRUCTURE
+-----------------------------------------------------------------------------------------------------------
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── Chart/
+│   │   │   └── Chart.jsx
+│   │   ├── Watchlist/
+│   │   │   └── Watchlist.jsx
+│   │   ├── IndicatorPanel.jsx
+│   │   ├── Header.jsx
+│   │   └── Settings.jsx
+│   ├── pages/
+│   │   ├── Home.jsx
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   └── Dashboard.jsx
+│   ├── hooks/
+│   │   ├── useWebSocket.js
+│   │   └── useAuth.js
+│   ├── services/
+│   │   ├── api.js                # Axios instance
+│   │   ├── authService.js
+│   │   └── chartService.js
+│   ├── context/
+│   │   ├── AuthContext.jsx
+│   │   └── ThemeContext.jsx
+│   ├── styles/
+│   │   └── main.css
+│   ├── App.jsx
+│   ├── index.js
+│   └── config.js                 # API URLs, constants
+├── package.json
+└── README.md
+-----------------------------------------------------------------------------------------------------------
+API ENDPOINT MAP
+-----------------------------------------------------------------------------------------------------------
+Method	Endpoint	Purpose
+POST	/api/auth/register	Create new user
+POST	/api/auth/login	Authenticate + return JWT
+GET	/api/chart/:symbol	Get historical candle data
+GET	/api/chart/:symbol/indicators	Get computed indicators
+GET	/api/watchlist	Get user’s watchlist
+POST	/api/watchlist	Add symbol to watchlist
+DELETE	/api/watchlist/:id	Remove symbol
+POST	/api/alerts	Create alert (price > X)
+DELETE	/api/alerts/:id	Delete alert
+GET	/api/user	Fetch user profile
+-----------------------------------------------------------------------------------------------------------
+
+WEBSOCKET EVENT FLOW
+Client (React)
+   ↓ connect
+WebSocket Server (Node.js)
+   ↓ subscribe(symbol)
+Market Data Service
+   ↓ stream prices
+WebSocket Server
+   ↓ broadcast(symbol, price)
+All connected clients
+   ↓ receive(price update)
+Client checks alert triggers
+   ↓ send("triggeredAlert", data)
+-----------------------------------------------------------------------------------------------------------
+DATABASE SCHEMA (Simplified)
+-----------------------------------------------------------------------------------------------------------
+users
+
+| id | email | password_hash | created_at |
+
+symbols
+
+| id | symbol | name | exchange |
+
+candlesticks
+
+| id | symbol_id | open | high | low | close | volume | timestamp |
+
+watchlists
+
+| id | user_id | symbol_id | added_at |
+
+alerts
+
+| id | user_id | symbol_id | condition | target_price | active | created_at |
+-----------------------------------------------------------------------------------------------------------
+DEPLOYMENT BLUEPRINT
+-----------------------------------------------------------------------------------------------------------
+Layer	             Service	                    Why
+Frontend	Vercel / Netlify	        Fast static hosting, CI/CD
+Backend	       AWS EC2 / Elastic Beanstalk	Scalable Node server
+DB	       AWS RDS (PostgreSQL)	        Managed, reliable
+Cache	       AWS ElastiCache (Redis)	        Low-latency live data
+Auth	       JWT (access + refresh)	        Secure stateless sessions
+Monitoring     CloudWatch + Grafana	        Metrics + logs
+DNS	       Route 53 + Cloudflare	        SSL, DDoS, CDN caching
+-----------------------------------------------------------------------------------------------------------
+DEVELOPMENT FLOW (Recommended)
+-----------------------------------------------------------------------------------------------------------
+Phase 1 – Backend API + DB
+
+Create Express app, connect PostgreSQL, test routes
+
+Phase 2 – Frontend integration
+
+Render data via REST + WebSocket
+
+Phase 3 – Auth, Watchlists
+
+JWT auth and persistent user data
+
+Phase 4 – Alerts & Caching
+
+Redis + background alert workers
+
+Phase 5 – Deploy
+
+CI/CD with Vercel (frontend) and AWS (backend)
+-----------------------------------------------------------------------------------------------------------
+FLEXIBILITY NOTES
+-----------------------------------------------------------------------------------------------------------
+You can refactor folder structures or even swap frameworks (e.g., switch React → Next.js) later with minimal rework as long as APIs remain consistent.
+
+Start with monolithic Express, and split into microservices only when necessary.
+
+Keep configurations modular — .env files per environment (.env.local, .env.prod, etc.).
+-----------------------------------------------------------------------------------------------------------
