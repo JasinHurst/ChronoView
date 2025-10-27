@@ -1,8 +1,8 @@
 # 🌒 ChronoView  
 ### Hermetic Time-Cycle and Astro-Numerology Analysis
 
-**ChronoView** is a research and visualization project focused on hermetic time-cycle analysis — combining astrology, numerology, and historical event data to reveal repeating planetary and numerical patterns through time.  
-It provides a framework for studying correspondences between celestial cycles, number harmonics, and collective or personal timelines.
+**ChronoView** is a research and visualization project focused on hermetic time-cycle analysis — combining astrology, numerology, and historical event data to reveal repeating planetary and numerical patterns through time. It provides a framework for studying correspondences between celestial cycles, number harmonics, and collective or personal timelines, and how these relate to financial assets such as stocks, ETFs, and cryptocurrencies.
+
 
 ---
 

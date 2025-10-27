@@ -1,8 +1,16 @@
-const About = () => (
-  <div className="page">
-    <h1>About ChronoView</h1>
-    <p>ChronoView helps you visualize time-based events in a clear, interactive way.</p>
-  </div>
-);
+import { useEffect } from "react";
+
+const About = () => {
+  useEffect(() => {
+    document.title = "ChronoView — About";
+  }, []);
+
+  return (
+    <div className="page">
+      <h1>About ChronoView</h1>
+      <p>ChronoView helps you visualize time-based events in a clear, interactive way.</p>
+    </div>
+  );
+};
 
 export default About;
