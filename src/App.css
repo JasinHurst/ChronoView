@@ -1,3 +1,26 @@
+/* index.js
+import './index.css';  // global styles
+
+// App.jsx
+import './App.css';    // app-wide styles
+
+// About.jsx
+import './About.css';  // page-specific styles
+
+index.css: fonts, global resets, colors
+
+App.css: layout (navbar, footer, shared containers)
+
+About.css: page-specific tweaks and overrides
+*/
+
+
+
+body {
+  background-color: black;
+  color:white;
+}
+
 .App {
   text-align: center;
 }
