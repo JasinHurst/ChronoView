@@ -1,8 +1,6 @@
 import { useEffect } from "react";
-import "./About.css";
 import { Form } from "react-router-dom";
-
-
+import "./About.css"
 const About = () => {
   useEffect(() => {
     document.title = "ChronoView — About";
