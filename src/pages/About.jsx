@@ -1,4 +1,7 @@
 import { useEffect } from "react";
+import "./About.css";
+import { Form } from "react-router-dom";
+
 
 const About = () => {
   useEffect(() => {
@@ -10,7 +13,10 @@ const About = () => {
       <h1>About ChronoView</h1>
       <p>ChronoView helps you visualize time-based events in a clear, interactive way.</p>
     </div>
+   
   );
 };
 
+
 export default About;
+
