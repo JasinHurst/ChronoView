@@ -2,13 +2,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1f1f1f;
+  background-color: var(--navbar-bg);
   padding: 12px 24px;
 }
 
 .nav-logo {
-  color: #ff6600;
-  font-size: 1.5rem;
+  color: var(--accent);
+  font-size: 2.25rem;
   font-weight: bold;
 }
 
@@ -16,14 +16,16 @@
   list-style: none;
   display: flex;
   gap: 20px;
+  font-size:1.25rem;
 }
 
 .nav-links a {
   text-decoration: none;
-  color: #fbf2f2;
-  transition: color 0.3s;
+  color: var(--text);
+  transition: color 0.3s ease;
 }
 
 .nav-links a:hover {
-  color: rgb(12, 228, 117);
+  color: var(--hover);
 }
+

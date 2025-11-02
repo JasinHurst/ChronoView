@@ -1,0 +1,25 @@
+.chart-window {
+  position: fixed;
+  left: 30px;
+  margin: 40px auto 0;
+  background-color: #272626;
+  border: 2px solid #ff6600;
+  border-radius: 20px;
+  overflow: auto;
+  min-width: 300px;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 102, 0, 0.7);
+  cursor: se-resize;
+  border-top-left-radius: 10px;
+}
