@@ -1,30 +1,35 @@
 .chart-window {
-  position: fixed;
-  top: 130px;
-  left: 50%;
-  transform: translateX(-50%);
   background: #1f1f1f;
   border: 2px solid #ff6600;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  overflow: hidden; 
+  overflow: hidden;
+  z-index: 1000;
 }
 
 .resize-handle {
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 15px;
-  height: 15px;
+  width: 30px;               
+  height: 30px;              
   cursor: se-resize;
-  background: #ff6600;
-  border-top-left-radius: 4px;
+  background: rgba(255, 102, 0, 0.6); 
+  border-top-left-radius: 6px;
+  transition: background 0.2s;
 }
 
-.lock-btn {
+
+.button-group {
   position: absolute;
   top: 8px;
   right: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+.lock-btn,
+.detach-btn {
   background: #ff6600;
   border: none;
   border-radius: 4px;
@@ -35,8 +40,8 @@
   transition: 0.2s;
 }
 
-.lock-btn:hover {
+.lock-btn:hover,
+.detach-btn:hover {
   background: rgb(12, 228, 117);
   color: #1f1f1f;
 }
-

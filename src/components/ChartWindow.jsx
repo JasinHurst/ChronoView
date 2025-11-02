@@ -1,14 +1,54 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './ChartWindow.css';
 
 const ChartWindow = () => {
   const [size, setSize] = useState({ width: 1750, height: 800 });
-  const [locked, setLocked] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [locked, setLocked] = useState(true);
   const chartRef = useRef(null);
+  const initialized = useRef(false);
 
+  // ✅ Center only once on mount
+  useEffect(() => {
+    if (initialized.current) return;
+    const centerX = (window.innerWidth - size.width) / 2;
+    const centerY = (window.innerHeight - size.height) / 2 + 50; // adjust offset manually
+    setPosition({ x: centerX, y: centerY });
+    initialized.current = true;
+  }, [size.width, size.height]);
+
+  // ----- Dragging -----
+  const isDragging = useRef(false);
+  const dragOffset = useRef({ x: 0, y: 0 });
+
+  const startDrag = (e) => {
+    if (locked) return;
+    isDragging.current = true;
+    dragOffset.current = {
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    };
+    window.addEventListener('mousemove', onDrag);
+    window.addEventListener('mouseup', stopDrag);
+  };
+
+  const onDrag = (e) => {
+    if (!isDragging.current) return;
+    setPosition({
+      x: e.clientX - dragOffset.current.x,
+      y: e.clientY - dragOffset.current.y,
+    });
+  };
+
+  const stopDrag = () => {
+    isDragging.current = false;
+    window.removeEventListener('mousemove', onDrag);
+    window.removeEventListener('mouseup', stopDrag);
+  };
+
+  // ----- Resizing -----
   const startResize = (e) => {
     if (locked) return;
-
     const startX = e.clientX;
     const startY = e.clientY;
     const startWidth = chartRef.current.offsetWidth;
@@ -16,8 +56,8 @@ const ChartWindow = () => {
 
     const onMouseMove = (e) => {
       setSize({
-        width: Math.max(300, startWidth + e.clientX - startX),
-        height: Math.max(300, startHeight + e.clientY - startY),
+        width: Math.max(600, startWidth + e.clientX - startX),
+        height: Math.max(400, startHeight + e.clientY - startY),
       });
     };
 
@@ -33,14 +73,29 @@ const ChartWindow = () => {
   return (
     <div
       className="chart-window"
-      style={{ width: size.width, height: size.height }}
       ref={chartRef}
+      style={{
+        width: size.width,
+        height: size.height,
+        position: 'fixed',
+        top: `${position.y}px`,
+        left: `${position.x}px`,
+        cursor: locked ? 'default' : 'move',
+      }}
+      onMouseDown={startDrag}
     >
       <canvas id="astroChart" width={size.width} height={size.height}></canvas>
+
       {!locked && <div className="resize-handle" onMouseDown={startResize}></div>}
-      <button className="lock-btn" onClick={() => setLocked(!locked)}>
-        {locked ? 'Unlock' : 'Lock'}
-      </button>
+
+      <div className="button-group">
+        <button className="detach-btn" onClick={() => setLocked(false)}>
+          Detach
+        </button>
+        <button className="lock-btn" onClick={() => setLocked(true)}>
+          Lock
+        </button>
+      </div>
     </div>
   );
 };
