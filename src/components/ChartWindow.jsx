@@ -1,15 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './ChartWindow.css';
 
 const ChartWindow = () => {
-  const [size, setSize] = useState({ width: 500, height: 500 });
+  const [size, setSize] = useState({ width: 1750, height: 800 });
+  const [locked, setLocked] = useState(false);
   const chartRef = useRef(null);
 
-  useEffect(() => {
-    // here you could draw or update your chart dynamically
-  }, [size]);
-
   const startResize = (e) => {
+    if (locked) return;
+
     const startX = e.clientX;
     const startY = e.clientY;
     const startWidth = chartRef.current.offsetWidth;
@@ -38,7 +37,10 @@ const ChartWindow = () => {
       ref={chartRef}
     >
       <canvas id="astroChart" width={size.width} height={size.height}></canvas>
-      <div className="resize-handle" onMouseDown={startResize}></div>
+      {!locked && <div className="resize-handle" onMouseDown={startResize}></div>}
+      <button className="lock-btn" onClick={() => setLocked(!locked)}>
+        {locked ? 'Unlock' : 'Lock'}
+      </button>
     </div>
   );
 };
