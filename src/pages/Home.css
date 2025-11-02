@@ -1,0 +1,64 @@
+/* Centers everything on the page */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #1f1f1f;
+  color: #fbf2f2;
+  text-align: center;
+}
+
+/* The main box ("card") */
+.user-choice-box,
+.login-form {
+  background: #2b2b2b;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  width: 350px;
+  display: grid;
+  place-items: center; /* centers heading and grid */
+  gap: 20px;
+}
+
+/* The grid of buttons */
+.choice-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Button styles */
+.choice-grid button,
+.login-form button {
+  background: #ff6600;
+  color: #1f1f1f;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.choice-grid button:hover,
+.login-form button:hover {
+  background: rgb(12, 228, 117);
+  color: #1f1f1f;
+}
+
+/* Inputs and form layout */
+.login-form {
+  display: grid;
+  gap: 10px;
+  width: 350px;
+}
+
+.login-form input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+}
