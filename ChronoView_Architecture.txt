@@ -1,174 +1,105 @@
-1) High-level layout
+1. High-Level Layout
 
-Frontend (static SPA): S3 + CloudFront (+ Route 53 + ACM for HTTPS)
+Frontend: React SPA hosted on S3 + CloudFront (HTTPS via ACM, domain in Route 53)
 
-Backend (always-on): EC2 (Node.js/Express or Python/FastAPI) behind an Application Load Balancer (ALB)
+Backend: EC2 (Node.js + Express) behind an Application Load Balancer
 
-Database: RDS (PostgreSQL or MySQL)
+Database: RDS (PostgreSQL)
 
-Auth: Cognito (JWT) or your own JWT service on EC2
+Auth: Custom JWT service (future Cognito option)
 
-Realtime: WebSocket server on EC2 (or ALB TCP/WebSocket passthrough)
+Realtime: WebSocket server on EC2 (optional later)
 
-Observability: CloudWatch (logs/metrics/alarms)
+Monitoring: CloudWatch logs / alarms
 
 Flow:
-
 User → CloudFront → S3 (SPA)
-                ↘  ALB → EC2 (API + WebSocket) → RDS
-                         ↘ CloudWatch (logs, alarms)
+  ↘ ALB → EC2 (API) → RDS
+    ↘ CloudWatch
 
-2) AWS components (rough)
+2. AWS Components (Simplified)
+Component	Purpose
+S3 + CloudFront	Hosts & caches the React build
+ALB + EC2	Runs Express API (PM2 + Nginx)
+RDS (Postgres)	Stores users / app data
+IAM + SSM / Secrets Manager	Manage creds & env vars
+CloudWatch	Logs / metrics / alarms
+3. Database (Current)
 
-S3: host SPA build (index.html, JS, CSS)
+users (id UUID PK, email UNIQUE, password_hash, display_name, created_at timestamp)
+Future tables: watchlists, charts, alerts, candles
 
-CloudFront: CDN + HTTPS (cache SPA; forward /api/* to ALB, don’t cache)
+4. Backend API (Current & Next)
 
-ALB: routes /api/* (HTTP) and /ws (WebSocket) to EC2 Target Group
+Now:
 
-EC2: t3.small/t3.medium, Ubuntu + Nginx (reverse proxy) + PM2/systemd for the app
+POST /api/users → add new user (works)
 
-RDS: Postgres/MySQL (db.t3.micro/t3.small), Multi-AZ optional
+Next:
 
-Cognito: user pool + hosted UI (or custom auth service)
+POST /api/login → verify credentials, issue JWT
 
-IAM: instance role with least privilege (CloudWatch logs, SSM)
+GET / api/me → fetch user profile
+Later: CRUD for charts, watchlists, alerts
 
-SSM Parameter Store / Secrets Manager: DB creds, JWT secrets, API keys
+5. Auth Strategy
 
-CloudWatch: dashboards + alarms (CPU, mem via agent, 5xx, latency, RDS connections)
+Start with custom login + JWT (bcrypt-hashed passwords).
+Optionally migrate to Cognito once production-ready.
 
-3) Minimal DB schema (RDS)
+6. Security / Networking
 
-users
+VPC: public (ALB), private (EC2 + RDS)
 
-id (uuid PK), email (unique), password_hash (if not Cognito), display_name, plan, created_at
+SG rules:
 
-watchlists
+ALB → EC2 (80/443)
 
-id (uuid PK), user_id (FK users.id), name, created_at
+EC2 → RDS (5432)
 
-watchlist_items
+ACM certs on CloudFront / ALB
 
-id (uuid PK), watchlist_id (FK), symbol, position (int)
+WAF on CloudFront
 
-charts
+7. DevOps / CI-CD
 
-id (uuid PK), user_id (FK), title, layout_json (jsonb/text), updated_at
+Frontend: build → S3 → CloudFront invalidate
 
-alerts
+Backend: build/test → deploy to EC2 (via GitHub Actions or CodeDeploy)
 
-id (uuid PK), user_id (FK), symbol, condition_json (jsonb/text), status, created_at
+Env vars: from SSM or Secrets Manager
 
-candles (optional if storing history)
+Logs: CloudWatch (7–30 day retention)
 
-id (bigserial PK), symbol, interval, ts (timestamp), o,h,l,c,v
+8. Costs (Low-traffic Estimate)
 
-index on (symbol, interval, ts)
+EC2 t3.small ≈ $15–20 / mo
 
-4) Backend API (EC2)
+RDS db.t3.micro ≈ $10–15 / mo
 
-REST (HTTPS via ALB)
+S3 + CloudFront + Route 53 ≈ $3–6 / mo
+Total: ~$30–45 / month
 
-GET /me, PUT /me
+9. Deployment Order
 
-GET/POST/PUT/DELETE /watchlists
+Domain + ACM certs
 
-GET/POST/PUT/DELETE /charts
+S3 + CloudFront (frontend)
 
-GET /candles?symbol=...&interval=...&from=...&to=...
+VPC + subnets
 
-POST/DELETE /alerts
+RDS (Postgres DB + users table)
 
-WebSocket
+EC2 + ALB (backend API)
 
-/ws → authenticate (JWT), subscribe/unsubscribe { symbols, interval }
+Auth (JWT or Cognito)
 
-server pushes price_tick, alert_trigger
+CloudWatch monitoring
 
-Tech notes
+CI/CD pipelines
 
-Nginx terminates HTTP → upstream to app (Express/FastAPI)
-
-Use a connection pool (e.g., pg-pool / mysql2-pool)
-
-Migrations via Prisma/Knex/Flyway
-
-5) Auth strategy
-
-Cognito (recommended): SPA uses Hosted UI → gets JWT → include Authorization: Bearer <JWT> in requests; backend verifies JWKs.
-
-Custom auth (alt): your login endpoint issues signed JWT; store only password hashes in users.
-
-6) Security & networking
-
-VPC with at least 2 AZs:
-
-Public subnets: ALB
-
-Private subnets: EC2 + RDS
-
-Security groups:
-
-ALB: allow 80/443 from internet
-
-EC2: allow 80/443 from ALB; 22 via SSM (disable public SSH)
-
-RDS: allow 5432/3306 from EC2 SG only
-
-ACM cert on CloudFront (and/or ALB if you serve API directly without CloudFront proxy)
-
-WAF on CloudFront (rate limiting, common rules)
-
-7) DevOps / CI-CD
-
-Frontend: Git → build (Vite/Next static export) → upload to S3 → CloudFront invalidation
-
-Backend: Git → build/test → artifact → CodeDeploy or GitHub Actions to EC2
-
-Config: environment vars from SSM; never bake secrets in images
-
-Logs: app stdout → CloudWatch; set retention (7–30 days)
-
-8) Realtime & performance
-
-WebSocket on EC2 for persistent connections
-
-Optional Redis (ElastiCache) later for pub/sub fan-out and session sharing if you scale to multiple EC2s
-
-If traffic grows: put EC2 behind Auto Scaling Group (min 1–2 instances) with target tracking on CPU/reqs
-
-9) Cost-aware start (ballpark)
-
-EC2 t3.small: ~$15–$20/mo
-
-RDS db.t3.micro: ~$10–$15/mo (storage + I/O extra)
-
-S3 + CloudFront + Route 53: ~$3–$6/mo
-
-Total: ~$30–$45/mo at low traffic (increase with Multi-AZ/ASG)
-
-10) Deployment order (fast path)
-
-Domain & certs: Route 53 + ACM
-
-S3 + CloudFront: host SPA
-
-VPC: public (ALB) + private (EC2/RDS) subnets
-
-RDS: create DB + users; store creds in Secrets Manager
-
-EC2 + ALB: launch app server, Nginx, PM2; point target group
-
-Auth: configure Cognito (or custom JWT) and wire middleware
-
-WS endpoint: /ws on EC2; test subscribe/publish
-
-Observability: CloudWatch alarms (5xx, latency, CPU, RDS connections)
-
-CI/CD: set pipelines for SPA and API; invalidate CF on deploy
-
-11) Repo/folder layout (simple)
-/frontend   # React/Vite SPA (build → S3)
-/backend    # API + WS (Node/Python) + migrations
-/infra      # IaC (CDK/Terraform) for VPC, ALB, EC2, RDS, CF, S3, Cognito
+10. Repo Layout
+ChronoView/
+├── frontend/   # React SPA (build → S3)
+├── backend/    # Node/Express API + db.js + server.js
+└── infra/      # IaC (VPC, ALB, EC2, RDS, CF, S3)
