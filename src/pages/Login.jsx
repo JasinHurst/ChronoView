@@ -4,11 +4,6 @@ export default function SignIn() {
   return (
     <div className="signin-container">
       <div className="signin-box">
-        <img
-          alt="ChronoView"
-          src="/favicon.ico"
-          className="signin-logo"
-        />
         <h2 className="signin-title">Sign in to ChronoView</h2>
 
         <form className="signin-form">

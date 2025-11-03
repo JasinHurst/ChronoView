@@ -1,101 +1,76 @@
-:root {
-  --bg: #1f1f1f;
-  --accent: #ff6600;
-  --text: #fbf2f2;
-  --hover: rgb(12, 228, 117);
+body {
+  background: black;
+  color: #fbf2f2;
+  font-family: sans-serif;
 }
 
-/* Page layout */
 .signin-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: var(--bg);
-  color: var(--text);
 }
 
-/* Form box */
 .signin-box {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 3rem 2rem;
+  background: #2a2a2a;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-  text-align: center;
 }
 
-/* Logo */
-.signin-logo {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto;
-}
-
-/* Title */
 .signin-title {
-  color: var(--accent);
+  color: #fbf2f2; 
   font-size: 1.8rem;
   font-weight: 700;
-  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-/* Inputs */
 .signin-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 2rem;
 }
 
 .signin-form input {
-  padding: 0.75rem 1rem;
+  padding: 0.75rem;
   border: none;
-  border-radius: 6px;
-  background-color: rgba(255, 255, 255, 0.08);
-  color: var(--text);
-  font-size: 1rem;
+  border-radius: 4px;
+  background: #1f1f1f;
+  color: #fbf2f2; 
 }
 
 .signin-form input::placeholder {
-  color: #aaa;
+  color: #fbf2f2; 
 }
 
-.signin-form input:focus {
-  outline: 2px solid var(--accent);
-}
-
-/* Button */
 .signin-form button {
-  background-color: var(--accent);
-  color: white;
+  background: #ff6600; 
+  color: #fbf2f2;
   font-weight: 600;
   border: none;
-  border-radius: 6px;
-  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  padding: 0.75rem;
   cursor: pointer;
-  transition: background-color 0.25s ease;
+  transition: background-color 0.2s ease;
 }
 
 .signin-form button:hover {
-  background-color: var(--hover);
+  background: rgb(12, 228, 117); 
 }
 
-/* Footer */
 .signin-footer {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   font-size: 0.9rem;
   color: #aaa;
 }
 
 .signin-footer a {
-  color: var(--accent);
+  color: #ff6600;
   text-decoration: none;
-  font-weight: 600;
-  transition: color 0.2s ease;
 }
 
 .signin-footer a:hover {
-  color: var(--hover);
+  color: rgb(12, 228, 117);
 }
