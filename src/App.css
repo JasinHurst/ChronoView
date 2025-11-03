@@ -17,7 +17,7 @@ About.css: page-specific tweaks and overrides
 
 /* ChronoView Theme Colors
 ----------------------------------
---navbar-bg: #1f1f1f;    
+--navbar-bg: #2a2a2a;    
 --accent: #ff6600;       
 --text: #fbf2f2;         
 --hover: rgb(12, 228, 117); 
@@ -25,11 +25,16 @@ About.css: page-specific tweaks and overrides
 ---------------------------------- */
 
 :root {
-  --navbar-bg: #1f1f1f;
+  --navbar-bg: #2a2a2a;
   --accent: #ff6600;
   --text: #fbf2f2;
   --hover: rgb(12, 228, 117);
   --background: black; 
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -37,6 +42,8 @@ body {
   color: var(--text);
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 h1, h2, h3, h4, h5 {
