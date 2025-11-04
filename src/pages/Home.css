@@ -1,18 +1,42 @@
+/* index.js
+import './index.css';  // global styles
+
+// App.jsx
+import './App.css';    // app-wide styles
+
+// About.jsx
+import './About.css';  // page-specific styles
+
+index.css: fonts, global resets, colors
+App.css: layout (navbar, footer, shared containers)
+About.css: page-specific tweaks and overrides
+*/
+
+/* ChronoView Theme Colors
+----------------------------------
+--navbar-bg: #2a2a2a;    
+--accent: #ff6600;       
+--text: #fbf2f2;         
+--hover: rgb(12, 228, 117); 
+--background: black; 
+--input-bg: #1f1f1f;
+---------------------------------- */
+
 /* Centers everything on the page */
 .home-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #1f1f1f;
-  color: #fbf2f2;
+  background: var(--background);
+  color: var(--text);
   text-align: center;
 }
 
 /* The main box ("card") */
 .user-choice-box,
 .login-form {
-  background: #2b2b2b;
+  background: var(--navbar-bg);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -33,8 +57,8 @@
 /* Button styles */
 .choice-grid button,
 .login-form button {
-  background: #ff6600;
-  color: #1f1f1f;
+  background: var(--accent);
+  color: var(--background);
   border: none;
   padding: 12px;
   border-radius: 8px;
@@ -45,8 +69,8 @@
 
 .choice-grid button:hover,
 .login-form button:hover {
-  background: rgb(12, 228, 117);
-  color: #1f1f1f;
+  background: var(--hover);
+  color: var(--background);
 }
 
 /* Inputs and form layout */
@@ -61,4 +85,6 @@
   border: none;
   border-radius: 5px;
   width: 100%;
+  background: var(--background);
+  color: var(--text);
 }
