@@ -1,46 +1,38 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./Home.css";
 
 const Home = () => {
-  const [choice, setChoice] = useState(null);
-
   useEffect(() => {
     document.title = "ChronoView — Home";
   }, []);
 
   return (
-    <div className="page">
-      <h1>Welcome to ChronoView</h1>
+    <div className="home-layout">
+      <div className="about-section">
+        <h1>ChronoView — Where Time Reveals the Pattern</h1>
+        <p>
+          ChronoView is a platform designed for those who seek to understand the deeper mechanics of time and markets.
+          By combining Gann methodology, numerology, time-cycles and astrology, ChronoView provides a structured environment to analyze, test, and visualize cycles that  influence financial and personal events.
+        </p>
+            
+        <p>
+          Whether you’re a seasoned technical analyst or a curious explorer of time-based systems, ChronoView empowers you to uncover hidden correlations, refine your methods, and gain insights from the intersection of mathematics, vibration, and cosmic rhythm.
+        </p>
+      </div>
 
-      {!choice && (
-        <div className="user-choice-box">
-          <h2>How would you like to continue?</h2>
-          <div className="button-group">
-            <button onClick={() => setChoice("login")}>Log In</button>
-            <button onClick={() => setChoice("create")}>Create Account</button>
-            <button onClick={() => setChoice("guest")}>Continue as Guest</button>
-          </div>
-        </div>
-      )}
-
-      {choice === "create" && (
+      
+      <div className="home-login-box">
+        <h2>Log in to ChronoView</h2>
         <form className="login-form">
-          <input type="email" placeholder="Email" required />
-          <input type="text" placeholder="Display Name" required />
-          <input type="password" placeholder="Password" required />
-          <button type="submit">Create Account</button>
-        </form>
-      )}
-
-      {choice === "login" && (
-        <form className="login-form">
-          <input type="email" placeholder="Email" required />
+          <input type="email" placeholder="Email address" required />
           <input type="password" placeholder="Password" required />
           <button type="submit">Log In</button>
         </form>
-      )}
-
-      {choice === "guest" && <p>Continuing as guest...</p>}
+        <p className="login-footer">
+          Don’t have an account? <Link to="/signup">Create one</Link>
+        </p>
+      </div>
     </div>
   );
 };

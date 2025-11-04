@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ChartWindow.css';
 
+
+
 const ChartWindow = () => {
   const [size, setSize] = useState({ width: 1750, height: 800 });
   const [position, setPosition] = useState({ x: 0, y: 0 });

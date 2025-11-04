@@ -22,69 +22,46 @@ About.css: page-specific tweaks and overrides
 --input-bg: #1f1f1f;
 ---------------------------------- */
 
-/* Centers everything on the page */
-.home-container {
+.home-layout {
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
+  justify-content: space-evenly;
+  gap: 4rem;
+  min-height: 100vh;
   background: var(--background);
   color: var(--text);
-  text-align: center;
+  padding: 2rem;
 }
 
-/* The main box ("card") */
-.user-choice-box,
-.login-form {
-  background: var(--navbar-bg);
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  width: 350px;
-  display: grid;
-  place-items: center; /* centers heading and grid */
-  gap: 20px;
+.about-section {
+  max-width: 500px;
+  line-height: 1.6;
+  text-align: left;
+  font-size: 20px
 }
 
-/* The grid of buttons */
-.choice-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  width: 100%;
+.about-section h1 {
+  color: var(--accent);
+  margin-bottom: 1rem;
 }
 
-/* Button styles */
-.choice-grid button,
-.login-form button {
-  background: var(--accent);
-  color: var(--background);
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.2s ease;
-}
-
-.choice-grid button:hover,
-.login-form button:hover {
+.about-buttons button:hover {
   background: var(--hover);
   color: var(--background);
 }
 
-/* Inputs and form layout */
-.login-form {
-  display: grid;
-  gap: 10px;
-  width: 350px;
+.home-login-box {
+  background: var(--navbar-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
 }
 
-.login-form input {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  width: 100%;
-  background: var(--background);
-  color: var(--text);
+.home-login-box h2 {
+  margin-bottom: 1.5rem;
 }
+
+
