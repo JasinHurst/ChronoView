@@ -10,8 +10,6 @@ export default function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
-    timezone: "",
-    birth_date: "",
   });
 
   const handleChange = (e) => {
@@ -98,34 +96,6 @@ export default function Signup() {
             onChange={handleChange}
             required
           />
-          <input
-            type="text"
-            name="birth_date"
-            placeholder="Birthdate (DD/MM/YYYY)"
-            value={formData.birth_date}
-            onChange={(e) => {
-              let value = e.target.value.replace(/\D/g, ""); // remove non-digits
-              if (value.length > 2 && value.length <= 4)
-                value = `${value.slice(0, 2)}/${value.slice(2)}`;
-              else if (value.length > 4)
-               value = `${value.slice(0, 2)}/${value.slice(2, 4)}/${value.slice(4, 8)}`;
-            setFormData({ ...formData, birth_date: value });
-            }}
-            maxLength="10"
-            required
-            />
-          <select
-            name="timezone"
-            value={formData.timezone}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Timezone</option>
-            <option value="America/New_York">Eastern (EST)</option>
-            <option value="America/Chicago">Central (CST)</option>
-            <option value="America/Denver">Mountain (MST)</option>
-            <option value="America/Los_Angeles">Pacific (PST)</option>
-          </select>
           <button type="submit">Sign Up</button>
         </form>
 
