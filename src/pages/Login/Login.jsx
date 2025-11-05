@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 
-export default function Login() {
+export default function Login({ setIsLoggedIn }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(""); 
+    setError("");
   };
 
   const handleSubmit = async (e) => {
@@ -26,6 +26,7 @@ export default function Login() {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
+        setIsLoggedIn(true); 
         navigate("/dashboard");
       } else {
         setError(data.error || "Invalid email or password.");
@@ -61,7 +62,6 @@ export default function Login() {
           <button type="submit">Log In</button>
         </form>
 
-        
         {error && <p className="error-text">{error}</p>}
 
         <p className="login-footer">

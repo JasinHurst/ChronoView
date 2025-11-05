@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar/Navbar";
 import ChartWindow from "./components/ChartWindow/ChartWindow";
 import Home from "./pages/Home/Home";
@@ -6,16 +7,26 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import About from "./pages/About/About";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 import "./App.css";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
   return (
     <Router>
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={<Login setIsLoggedIn={setIsLoggedIn} />}
+        />
         <Route path="/about" element={<About />} />
         <Route path="/signup" element={<Signup />} />
 
