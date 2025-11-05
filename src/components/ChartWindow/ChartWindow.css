@@ -24,50 +24,28 @@ About.css: page-specific tweaks and overrides
 --background: black; 
 --input-bg: #1f1f1f;
 ---------------------------------- */
-
 .chart-window {
-  background: var(--navbar-bg);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85vw;
+  height: 75vh;
+  max-width: 1600px;
+  max-height: 900px;
   border: 2px solid var(--accent);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  overflow: hidden;
-  z-index: 1000;
-}
-
-.resize-handle {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 30px;               
-  height: 30px;              
-  cursor: se-resize;
-  background: var(--accent); 
-  border-top-left-radius: 6px;
-  transition: background 0.2s;
-}
-
-
-.button-group {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+  border-radius: 10px;
+  background: var(--navbar-bg);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
   display: flex;
-  gap: 6px;
+  justify-content: center;
+  align-items: center;
 }
 
-.lock-btn,
-.detach-btn {
-  background: var(--accent);
-  border: none;
-  border-radius: 4px;
-  color: var(--text);
-  font-size: 14px;
-  padding: 4px 8px;
-  cursor: pointer;
-  transition: 0.2s;
+.chart-container {
+  width: 95%;
+  height: 95%;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.lock-btn:hover,
-.detach-btn:hover {
-  background: var(--hover);
-}
