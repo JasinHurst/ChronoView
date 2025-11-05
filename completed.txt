@@ -87,11 +87,11 @@ Stores ChronoView user account information for authentication, personalization, 
 ## 🧩 Environment Variables (`.env`)
 
 ```
-DB_USER=postgres
-DB_HOST=localhost
-DB_NAME=chronoview
-DB_PASS=Afireinside1!
-DB_PORT=5432
+DB_USER=
+DB_HOST=
+DB_NAME=
+DB_PASS=
+DB_PORT=
 JWT_SECRET=my_ultra_secret_token_key
 ```
 
