@@ -10,16 +10,14 @@ const ChartWindow = () => {
   const chartRef = useRef(null);
   const initialized = useRef(false);
 
-  // ✅ Center only once on mount
   useEffect(() => {
     if (initialized.current) return;
     const centerX = (window.innerWidth - size.width) / 2;
-    const centerY = (window.innerHeight - size.height) / 2 + 50; // adjust offset manually
+    const centerY = (window.innerHeight - size.height) / 2 + 50; 
     setPosition({ x: centerX, y: centerY });
     initialized.current = true;
   }, [size.width, size.height]);
 
-  // ----- Dragging -----
   const isDragging = useRef(false);
   const dragOffset = useRef({ x: 0, y: 0 });
 
@@ -48,7 +46,6 @@ const ChartWindow = () => {
     window.removeEventListener('mouseup', stopDrag);
   };
 
-  // ----- Resizing -----
   const startResize = (e) => {
     if (locked) return;
     const startX = e.clientX;

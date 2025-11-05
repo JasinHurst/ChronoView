@@ -74,7 +74,7 @@ body {
 .signup-form input:focus {
   outline: none;
   border: 2px solid var(--accent);
-  background-color: #1f1f1f;
+  background-color: var(--input-bg);
   box-shadow: 0 0 5px var(--accent);
 }
 
