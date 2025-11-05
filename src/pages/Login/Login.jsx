@@ -9,7 +9,7 @@ export default function Login() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(""); // clear error when typing
+    setError(""); 
   };
 
   const handleSubmit = async (e) => {
@@ -61,7 +61,7 @@ export default function Login() {
           <button type="submit">Log In</button>
         </form>
 
-        {/* ✅ Inline error display */}
+        
         {error && <p className="error-text">{error}</p>}
 
         <p className="login-footer">
