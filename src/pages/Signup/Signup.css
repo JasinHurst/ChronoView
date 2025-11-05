@@ -41,6 +41,7 @@ body {
   text-align: center;
   width: 100%;
   max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .signup-title {
@@ -58,16 +59,50 @@ body {
 
 .signup-form input {
   padding: 0.75rem;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 4px;
   background: var(--input-bg);
   color: var(--text);
-  transition: background 0.2s ease;
+  transition: border 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .signup-form input::placeholder {
   color: var(--text);
   opacity: 0.8;
+}
+
+.signup-form input:focus {
+  outline: none;
+  border: 2px solid var(--accent);
+  background-color: #1f1f1f;
+  box-shadow: 0 0 5px var(--accent);
+}
+
+.signup-form input.valid {
+  border: 2px solid var(--hover);
+  box-shadow: 0 0 4px var(--hover);
+}
+
+.signup-form input.error {
+  border: 2px solid var(--accent);
+  background-color: rgba(255, 59, 59, 0.08);
+  box-shadow: 0 0 4px var(--accent);
+}
+
+.error-text {
+  color: var(--accent);
+  font-size: 0.9rem;
+  margin-top: -8px;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.success-text {
+  color: var(--hover);
+  font-size: 0.9rem;
+  margin-top: -8px;
+  margin-bottom: 6px;
+  text-align: left;
 }
 
 .signup-form button {
@@ -78,12 +113,13 @@ body {
   border-radius: 4px;
   padding: 0.75rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .signup-form button:hover {
   background: var(--hover);
   color: var(--background);
+  transform: scale(1.03);
 }
 
 .signup-footer {
