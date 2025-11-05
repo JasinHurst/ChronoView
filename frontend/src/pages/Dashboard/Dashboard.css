@@ -1,0 +1,64 @@
+/* index.js
+import './index.css';  // global styles
+
+// App.jsx
+import './App.css';    // app-wide styles
+
+// About.jsx
+import './About.css';  // page-specific styles
+
+index.css: fonts, global resets, colors
+App.css: layout (navbar, footer, shared containers)
+About.css: page-specific tweaks and overrides
+*/
+
+/* ChronoView Theme Colors
+----------------------------------
+--navbar-bg: #2a2a2a;    
+--accent: #ff6600;       
+--text: #fbf2f2;         
+--hover: rgb(12, 228, 117); 
+--background: black; 
+--input-bg: #1f1f1f;
+---------------------------------- */
+
+.dashboard-page {
+  text-align: center;
+  color: var(--text);
+  background-color: var(--background);
+  min-height: 100vh;
+  padding-top: 6rem;
+}
+
+.dashboard-page h1 {
+  color: var(--accent);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: var(--text);
+}
+
+.dashboard-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.dashboard-btn {
+  background: var(--accent);
+  color: var(--background);
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.dashboard-btn:hover {
+  background: var(--hover);
+  color: var(--background);
+}

@@ -1,0 +1,16 @@
+cd frontend 
+npm start
+
+
+cd backend-node
+node server.js 
+
+
+cd backend-python
+source "venv/Scripts/activate"
+uvicorn main:app --reload --port 8000
+or 
+cd ~/OneDrive/Desktop/ChronoView - Copy/backend-python && source "venv/Scripts/activate" && uvicorn main:app --reload --port 8000
+
+start venv = source venv/Scripts/activate in Safe@DESKTOP-OI7P5QS MINGW64 ~/OneDrive/Desktop/ChronoView - Copy/backend-python
+

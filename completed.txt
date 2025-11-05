@@ -1,0 +1,132 @@
+# ChronoView Full-Stack Architecture Summary (Local Development Setup)
+
+ChronoView is a **React + Node.js + PostgreSQL** full-stack web application currently running entirely on a **local development environment**.
+This sheet merges your toolchain overview, dependency list, and final PostgreSQL users schema into one consolidated reference.
+
+---
+
+## 🧠 Project Overview
+
+| Layer               | Technology                                | Purpose                                         | Why It’s Used                                                         |
+| ------------------- | ----------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------- |
+| **Frontend**        | **React / React-DOM / React-Router-DOM**  | Builds ChronoView’s interface and page routing. | Provides reactive UI and smooth single-page navigation.               |
+| **Styling**         | **Tailwind CSS / PostCSS / Autoprefixer** | Handles responsive, modern CSS styling.         | Ensures consistent look across browsers with utility-first design.    |
+| **Backend**         | **Node.js + Express**                     | REST API layer between frontend and database.   | Processes requests, handles authentication, and manages data flow.    |
+| **Database**        | **PostgreSQL (via DBeaver GUI)**          | Stores user data securely.                      | Reliable relational DB with strong constraint enforcement.            |
+| **ORM/Driver**      | **pg**                                    | Node PostgreSQL client.                         | Connects Express backend to PostgreSQL through parameterized queries. |
+| **Security**        | **bcrypt**                                | Password hashing library.                       | Hashes and salts passwords before storage.                            |
+| **Configuration**   | **dotenv**                                | Loads environment variables from `.env`.        | Keeps credentials and secrets out of source code.                     |
+| **Testing / Build** | **react-scripts / @testing-library**      | Development automation and test utilities.      | Simplifies builds and ensures UI components work correctly.           |
+
+---
+
+## ⚙️ Installed NPM Dependencies (`npm list --depth=0`)
+
+```
+chronoview@0.1.0
+├── @testing-library/dom@10.4.1
+├── @testing-library/jest-dom@6.9.1
+├── @testing-library/react@16.3.0
+├── @testing-library/user-event@13.5.0
+├── autoprefixer@10.4.21
+├── bcrypt@6.0.0
+├── dotenv@17.2.3
+├── pg@8.16.3
+├── postcss@8.5.6
+├── react@19.2.0
+├── react-dom@19.2.0
+├── react-router-dom@7.9.5
+├── react-scripts@5.0.1
+├── tailwindcss@4.1.16
+└── web-vitals@2.1.4
+```
+
+---
+
+## 🧱 PostgreSQL – Users Table Schema (Final Version 3)
+
+**Table:** `public.users`
+Stores ChronoView user account information for authentication, personalization, and audit tracking.
+
+| #  | Column            | Type / Constraint                                                                          | Description                                                                                        |
+| -- | ----------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| 1  | **id**            | `SERIAL PRIMARY KEY`                                                                       | Auto-incrementing unique identifier.                                                               |
+| 2  | **email**         | `VARCHAR(100) UNIQUE NOT NULL`<br>Regex `^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$` | Primary login / contact address.                                                                   |
+| 3  | **password_hash** | `VARCHAR(255) NOT NULL`                                                                    | Bcrypt-hashed password.<br>Must meet strength rules (≥ 8 chars, upper + lower + number + special). |
+| 4  | **first_name**    | `VARCHAR(100) NOT NULL`                                                                    | User’s given name.                                                                                 |
+| 5  | **last_name**     | `VARCHAR(100) NOT NULL`                                                                    | User’s family name.                                                                                |
+| 6  | **username**      | `VARCHAR(50) UNIQUE NOT NULL`                                                              | Public handle for profile lookup.                                                                  |
+| 7  | **birth_date**    | `VARCHAR(10)` NULL<br>Regex `^[0-9]{2}/[0-9]{2}/[0-9]{4}$`                                 | Optional date in MM/DD/YYYY format (auto-formatted by frontend).                                   |
+| 8  | **verified**      | `BOOLEAN DEFAULT false`                                                                    | Email verification flag.                                                                           |
+| 9  | **last_login**    | `TIMESTAMP` NULL                                                                           | Updated on successful login (`UPDATE users SET last_login = NOW()`).                               |
+| 10 | **created_at**    | `TIMESTAMP DEFAULT CURRENT_TIMESTAMP`                                                      | Record creation timestamp.                                                                         |
+
+**Indexes**
+
+* `idx_users_email` → `email` for fast auth lookups
+* `idx_users_username` → `username` for profile searches
+
+---
+
+## 🔐 Backend Integration (Express / PostgreSQL)
+
+**Files:** `server.js`, `db.js`
+
+| Feature                   | Implementation                                                                                                                          |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Database Connection**   | `pg.Pool()` using credentials from `.env`.                                                                                              |
+| **Password Hashing**      | `bcrypt.hash(password, 10)` before insert; compared with `bcrypt.compare()` on login.                                                   |
+| **JWT Authentication**    | `jsonwebtoken.sign({ id, email, username }, process.env.JWT_SECRET, { expiresIn: "2h" })`; stored in `localStorage`, cleared on logout. |
+| **Duplicate Handling**    | `err.code === "23505"` → `"Email or username already exists"`.                                                                          |
+| **Parameterized Queries** | Uses `$1`, `$2`, … placeholders → prevents SQL injection.                                                                               |
+| **Error Handling**        | Returns generic `"Server error"` to client, hides internal SQL.                                                                         |
+| **Routes Implemented**    | `/api/users` (signup), `/api/login`, `/api/logout`.                                                                                     |
+
+---
+
+## 🧩 Environment Variables (`.env`)
+
+```
+DB_USER=
+DB_HOST=
+DB_NAME=
+DB_PASS=
+DB_PORT=
+JWT_SECRET=my_ultra_secret_token_key
+```
+
+> `.env` is ignored in `.gitignore` to keep secrets local.
+
+---
+
+## 🧠 Security & Best Practices
+
+* **No plaintext passwords** — only bcrypt hashes stored.
+* **JWT tokens** expire after 2 hours.
+* **CORS** limited to local/dev origins.
+* **Parameterized SQL** prevents injection attacks.
+* **DB CHECK constraints** backstop frontend validation.
+* **Triple-layer validation:** React → Express → PostgreSQL.
+
+---
+
+## ✅ System Summary
+
+| Layer                     | Responsibility                                                  | Enforcement |
+| ------------------------- | --------------------------------------------------------------- | ----------- |
+| **Frontend (React)**      | Validates form input, enforces regex rules & password strength. | ✅           |
+| **Backend (Node.js)**     | Hashes passwords, handles JWT auth, prevents duplicates.        | ✅           |
+| **Database (PostgreSQL)** | Enforces schema constraints, unique keys, defaults.             | ✅           |
+
+---
+
+### 💡 Deployment Note
+
+Currently all components — React frontend, Node backend, and PostgreSQL database — run **locally** on the same laptop.
+When ready for production, you can migrate PostgreSQL to AWS RDS or Supabase, host the backend on EC2 or Render, and deploy the React build to Netlify or Vercel.
+
+---
+
+**ChronoView Stack Summary:**
+
+> React 19 + Express + PostgreSQL + bcrypt + JWT = secure, scalable, full-stack application foundation.

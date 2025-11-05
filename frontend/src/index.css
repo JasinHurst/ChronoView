@@ -1,0 +1,41 @@
+/* index.js
+import './index.css';  // global styles
+
+// App.jsx
+import './App.css';    // app-wide styles
+
+// About.jsx
+import './About.css';  // page-specific styles
+
+index.css: fonts, global resets, colors
+
+App.css: layout (navbar, footer, shared containers)
+
+About.css: page-specific tweaks and overrides
+*/
+
+
+/* ChronoView Theme Colors
+----------------------------------
+--navbar-bg: #2a2a2a;    
+--accent: #ff6600;       
+--text: #fbf2f2;         
+--hover: rgb(12, 228, 117); 
+--background: black; 
+--input-bg: #1f1f1f;
+---------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap');
+
+
+body {
+  margin: 0;
+  font-family: 'Raleway', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: 'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+

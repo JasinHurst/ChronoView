@@ -1,0 +1,21 @@
+{
+  "short_name": "ChronoView",
+  "name": "ChronoView — Numerology Time-Cycle Visualization & Research",
+  "icons": [
+    {
+      "src": "logo2.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#272626",
+  "background_color": "#1c1c1c",
+  "description": "ChronoView is a research and visualization project focused on hermetic time-cycle analysis — combining astrology, numerology, and historical event data to reveal repeating planetary and numerical patterns through time."
+}

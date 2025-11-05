@@ -1,0 +1,67 @@
+/* index.js
+import './index.css';  // global styles
+
+// App.jsx
+import './App.css';    // app-wide styles
+
+// About.jsx
+import './About.css';  // page-specific styles
+
+index.css: fonts, global resets, colors
+App.css: layout (navbar, footer, shared containers)
+About.css: page-specific tweaks and overrides
+*/
+
+/* ChronoView Theme Colors
+----------------------------------
+--navbar-bg: #2a2a2a;    
+--accent: #ff6600;       
+--text: #fbf2f2;         
+--hover: rgb(12, 228, 117); 
+--background: black; 
+--input-bg: #1f1f1f;
+---------------------------------- */
+
+.home-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 4rem;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  padding: 2rem;
+}
+
+.about-section {
+  max-width: 500px;
+  line-height: 1.6;
+  text-align: left;
+  font-size: 20px
+}
+
+.about-section h1 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.about-buttons button:hover {
+  background: var(--hover);
+  color: var(--background);
+}
+
+.home-login-box {
+  background: var(--navbar-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.home-login-box h2 {
+  margin-bottom: 1.5rem;
+}
+
+
