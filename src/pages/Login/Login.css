@@ -100,3 +100,17 @@ body {
 .login-footer a:hover {
   color: var(--hover);
 }
+
+.error-text {
+  color: var(--text); 
+  margin-top: 1rem;
+  font-size: 1.2rem;         
+  font-weight: 600;           
+  text-align: center;
+  background: black;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  letter-spacing: 0.5px;
+}
+
